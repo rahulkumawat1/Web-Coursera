@@ -4,7 +4,7 @@ $er = '';
 if (isset($_POST['signUp'])) {
     $name = $_POST['name'];
     $mail = $_POST['email'];
-    $pass = $_POST['password'];
+    $pass = base64_encode($_POST['password']);
 
     if ($name == "") {
         $er = "Name cannot be empty";
@@ -15,12 +15,14 @@ if (isset($_POST['signUp'])) {
     if (!($connection))
         echo 'connection error';
     else {
-        $sqlquery = "INSERT INTO user (Name, Email, Password) VALUES ('$name', '$mail', '$pass')";
+        $sqlquery = "INSERT INTO user (name, email, password, admin_flag) VALUES ('$name', '$mail', '$pass', 0)";
         $result = mysqli_query($connection, $sqlquery);
-        $arr = mysqli_fetch_array($result);
-        if ($arr) {
-            $_SESSION['arr'] = $arr;
-            header("Location:http://localhost/DBMS/pages/index.php");
+        if ($result) {
+            $sqlquery = "SELECT * FROM user WHERE email='$mail'";
+            $result = mysqli_query($connection, $sqlquery);
+            $arr = mysqli_fetch_array($result);
+            $_SESSION['auth_arr'] = $arr;
+            header("Location:http://localhost/Web-Coursera/index.php");
         } else {
             $er = "Error in credentials";
         }
@@ -46,41 +48,10 @@ if (isset($_POST['signUp'])) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Web Coursera</a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="" style="color: rgb(238, 237, 237)">Sign Up</a>
-                    </li>
-                </ul>
-
-                <form class="d-flex">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </button>
-                    <!-- <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search"
-              style="border: white"
-            />
-            <span class="input-group-btn">
-              <button class="btn btn-search" type="button">
-                <i class="fa fa-search"></i>
-              </button>
-            </span>
-          </div> -->
-                </form>
-            </div>
-        </div>
-    </nav>
+    <?php
+    $main = "signup.php";
+    include('header.php')
+    ?>
 
     <div class="login-dark">
         <form action="signup.php" method="POST">
@@ -114,89 +85,7 @@ if (isset($_POST['signUp'])) {
     </div>
 
     <!-- Site footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <h6>About</h6>
-                    <p class="text-justify">
-                        <i>Web Coursera</i> is an initiative to help the upcoming
-                        programmers with the code. Web Coursera focuses on providing the
-                        most efficient code or snippets as the code wants to be simple. We
-                        will help programmers build up concepts in different web
-                        development concepts that include HTML, CSS, JavaScript, Java,
-                        Python and ajax.
-                    </p>
-                </div>
-
-                <div class="col-xs-6 col-md-3">
-                    <h6>Categories</h6>
-                    <ul class="footer-links">
-                        <li>
-                            <a href="html_course.html">HTML</a>
-                        </li>
-                        <li>
-                            <a href="css_course.html">CSS</a>
-                        </li>
-                        <li>
-                            <a href="js_course.html">JavaScript</a>
-                        </li>
-                        <li>
-                            <a href="java_course.html">Java</a>
-                        </li>
-                        <li>
-                            <a href="ajax_course.html">Ajax</a>
-                        </li>
-                        <li>
-                            <a href="python_course.html">Python</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-xs-6 col-md-3">
-                    <h6>Quick Links</h6>
-                    <ul class="footer-links">
-                        <li><a href="terms.html">Terms</a></li>
-                        <li><a href="policy.html">Privacy Policy</a></li>
-                        <li>
-                            <a href="#">Help and Support</a>
-                        </li>
-                        <li>
-                            <a href="#">Contact us</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <hr />
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-sm-6 col-xs-12">
-                    <p class="copyright-text">
-                        Copyright &copy; 2021 All Rights Reserved by
-                        <a href="#">Web Coursera</a>.
-                    </p>
-                </div>
-
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <ul class="social-icons">
-                        <li>
-                            <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li>
-                            <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li>
-                            <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
-                        </li>
-                        <li>
-                            <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include('footer.php') ?>
 </body>
 
 </html>
