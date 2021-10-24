@@ -19,11 +19,7 @@ if (isset($_POST['login'])) {
         $arr = mysqli_fetch_array($result);
         if ($arr && base64_decode($arr['password']) == $pass) {
             $_SESSION['auth_arr'] = $arr;
-            if ($arr['admin_flag'] == 0) {
-                header("Location:http://localhost/Web-Coursera/index.php");
-            } else {
-                header("Location:http://localhost/Web-Coursera/admin.php");
-            }
+            header("Location:http://localhost/Web-Coursera/index.php");
         } else {
             $er = "Credentials are wrong.";
         }

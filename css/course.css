@@ -265,3 +265,8 @@ h2 {
     font-weight: 600;
   }
 }
+
+.rotateBy0 {
+  transform: rotate(0deg);
+  transition: all 0.5s linear;
+}

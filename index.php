@@ -89,7 +89,7 @@ if (isset($_GET['search'])) {
 
     <div class="container-fluid">
         <?php for ($i = 0; $i < count($courses); $i++) { ?>
-            <div class="row mt-3 ms-5 me-5">
+            <div class="row mt-3 ms-5 me-5 <?php echo ($i == count($courses) - 1) ? 'mb-3' : '' ?>">
                 <div class="col">
                     <div class="card text-white">
                         <div class="card-body">

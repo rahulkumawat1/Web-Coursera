@@ -7,12 +7,17 @@ if (!array_key_exists('id', $_GET)) {
 $id = $_GET['id'];
 
 $auth = false;
+$completed = false;
 $connection = new mysqli('localhost', 'root', '', 'web_coursera');
+
 if (isset($_SESSION['auth_arr'])) {
     $auth = true;
     $user_id = $_SESSION['auth_arr']['id'];
-    $sqlquery = "INSERT INTO done_course VALUES ('$user_id', '$id')";
-    mysqli_query($connection, $sqlquery);
+
+    $sqlquery = "SELECT * FROM done_course WHERE user_id='$user_id' AND course_id='$id'";
+    $result = mysqli_query($connection, $sqlquery);
+    if (mysqli_fetch_array($result))
+        $completed = true;
 }
 
 $sqlquery = "SELECT * from course WHERE id='$id'";
@@ -29,6 +34,13 @@ while ($row = mysqli_fetch_array($result)) {
     $video_refs[$x] = $row;
     $x++;
 }
+
+function dur_compare($element1, $element2)
+{
+    return $element1['dur_val'] - $element2['dur_val'];
+}
+
+usort($video_refs, 'dur_compare');
 
 $sqlquery = "SELECT * FROM site_ref WHERE course_id='$id'";
 $result = mysqli_query($connection, $sqlquery);
@@ -61,7 +73,7 @@ while ($row = mysqli_fetch_array($result)) {
     <div class="container-fluid">
         <div class="row mt-5 ms-4">
             <div class="col-lg-6 mt-5">
-                <img class="rounded mt-5" src="./images/HTML-Image.jpg" alt="" height="370" width="640" />
+                <img class="rounded mt-5" src="<?php echo $course['image_url'] ?>" alt="" height="370" width="640" />
             </div>
             <div class="col-lg-5">
                 <div class="card">
@@ -88,14 +100,9 @@ while ($row = mysqli_fetch_array($result)) {
                             <th scope="col">Video</th>
                             <th scope="col">Title</th>
                             <th scope="col">
-                                <div>Duration</div>
-                                <div style="
-                    text-align: center;
-                    width: 55%;
-                    cursor: pointer;
-                    color: rgb(14, 191, 235);
-                  " id="sortButton">
-                                    v
+                                <div style="width: fit-content;">
+                                    <div>Duration</div>
+                                    <div style="transform:rotate(180deg); transition: all 0.3s linear; text-align: center; cursor: pointer; color: rgb(14, 191, 235);" id="sortButton">v</div>
                                 </div>
                             </th>
                         </tr>
@@ -145,14 +152,31 @@ while ($row = mysqli_fetch_array($result)) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            if ($auth) {
+                if ($completed) { ?>
+                    <div class="text-center">
+                        <button class="btn btn-success mt-5">Completed 🎉🎉</button>
+                    </div>
+                <?php } else { ?>
+                    <div class="text-center">
+                        <button id="markAsCompleted" class="btn btn-primary mt-5">Mark as Completed</button>
+                    </div>
+
+            <?php }
+            } ?>
+
         </div>
     </div>
+
 
     <!-- Site footer -->
     <?php include('footer.php') ?>
 
 
     <script type="application/javascript">
+        var x = 0;
+
         function sortWithIndeces(toSort) {
             for (var i = 0; i < toSort.length; i++) {
                 toSort[i] = [toSort[i], i];
@@ -168,21 +192,23 @@ while ($row = mysqli_fetch_array($result)) {
             return toSort;
         }
 
-        function myFunction(event) {
+        function sortRefs(event) {
             refrences = document.getElementById("references");
             refs = [...refrences.children];
             data_lens = refs.map((ref) => ref.getAttribute("data-len"));
             sorted_indices = sortWithIndeces(data_lens).sortIndices;
             sorted_refs = [];
 
-            if (event.srcElement.innerText == "^") {
-                event.srcElement.innerText = "v";
+            if (x == 1) {
+                event.srcElement.style.transform = "rotate(180deg)";
+                x = 0;
                 for (var i = 0; i < sorted_indices.length; i++) {
                     refrences.children[sorted_indices[i]].children[0].innerText = i + 1;
                     sorted_refs.push(refs[sorted_indices[i]].outerHTML);
                 }
             } else {
-                event.srcElement.innerText = "^";
+                event.srcElement.style.transform = "rotate(0deg)";
+                x = 1;
                 for (var i = sorted_indices.length - 1; i >= 0; i--) {
                     refrences.children[sorted_indices[i]].children[0].innerText =
                         sorted_indices.length - i;
@@ -193,6 +219,20 @@ while ($row = mysqli_fetch_array($result)) {
             refrences.innerHTML = sorted_refs.join(" ");
         }
 
-        document.getElementById("sortButton").addEventListener("click", myFunction);
+        function markAsCompleted(event) {
+            event.srcElement.classList.remove("btn-primary");
+            event.srcElement.classList.add("btn-success");
+            event.srcElement.innerHTML = "Completed 🎉🎉";
+            <?php
+            $user_id = $_SESSION['auth_arr']['id'];
+            $sqlquery = "INSERT INTO done_course VALUES ('$user_id', '$id')";
+            mysqli_query($connection, $sqlquery);
+            ?>
+        }
+
+        <?php if (!$completed) { ?>
+            document.getElementById("markAsCompleted").addEventListener("click", markAsCompleted);
+        <?php } ?>
+        document.getElementById("sortButton").addEventListener("click", sortRefs);
     </script>
 </body>
