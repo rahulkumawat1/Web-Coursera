@@ -6,7 +6,7 @@ if (isset($_SESSION['auth_arr'])) {
 }
 
 $connection = new mysqli('localhost', 'root', '', 'web_coursera');
-$sqlquery = "SELECT course_id, COUNT(*) FROM done_course GROUP BY course_id";
+$sqlquery = "SELECT course_id, COUNT(*) FROM enrollment GROUP BY course_id";
 $result = mysqli_query($connection, $sqlquery);
 $x = 0;
 $no_of_students = array();

@@ -62,6 +62,12 @@ if (isset($_POST['login'])) {
             <div class="form-group">
                 <input class="form-control" type="password" name="password" placeholder="Password" />
             </div>
+            <!-- <div class="form-group">
+                <select class="form-control" style="background-color: ;" name="cars">
+                    <option value="volvo" style="background:black; color: white;">As User</option>
+                    <option value="saab" style="background:black; color: white;">As Admin</option>
+                </select>
+            </div> -->
             <div class="form-group d-grid gap-2">
                 <button class="btn btn-primary" type="submit" name="login">Log In</button>
                 <p style="color: red; text-align:center;">

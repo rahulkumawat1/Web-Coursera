@@ -1,24 +1,37 @@
 <?php
 session_start();
 
+
 if (!array_key_exists('id', $_GET)) {
     header("Location:http://localhost/Web-Coursera/index.php");
 }
 $id = $_GET['id'];
 
 $auth = false;
-$completed = false;
+$enrolled = false;
 $connection = new mysqli('localhost', 'root', '', 'web_coursera');
+
+
 
 if (isset($_SESSION['auth_arr'])) {
     $auth = true;
     $user_id = $_SESSION['auth_arr']['id'];
+    if (isset($_POST['enrollReq'])) {
+        if ($_POST['enrollReq'] == '0') {
+            $sqlquery = "DELETE FROM enrollment WHERE user_id='$user_id' AND course_id='$id'";
+            mysqli_query($connection, $sqlquery);
+        } else {
+            $sqlquery = "INSERT INTO enrollment VALUES ('$user_id', '$id')";
+            mysqli_query($connection, $sqlquery);
+        }
+    }
 
-    $sqlquery = "SELECT * FROM done_course WHERE user_id='$user_id' AND course_id='$id'";
+    $sqlquery = "SELECT * FROM enrollment WHERE user_id='$user_id' AND course_id='$id'";
     $result = mysqli_query($connection, $sqlquery);
     if (mysqli_fetch_array($result))
-        $completed = true;
+        $enrolled = true;
 }
+
 
 $sqlquery = "SELECT * from course WHERE id='$id'";
 $result = mysqli_query($connection, $sqlquery);
@@ -59,7 +72,6 @@ while ($row = mysqli_fetch_array($result)) {
 
 <head>
     <title>Web Coursera</title>
-    <link rel="stylesheet" href="../bootstrap-5.1.0-dist/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/course.css" />
@@ -153,18 +165,19 @@ while ($row = mysqli_fetch_array($result)) {
                 </table>
             </div>
             <?php
-            if ($auth) {
-                if ($completed) { ?>
+            if ($auth) { ?>
+                <form method="POST">
                     <div class="text-center">
-                        <button class="btn btn-success mt-5">Completed 🎉🎉</button>
+                        <?php
+                        if ($enrolled) { ?>
+                            <input type="hidden" name="enrollReq" value="0">
+                        <?php } else { ?>
+                            <input type="hidden" name="enrollReq" value="1">
+                        <?php } ?>
+                        <button class="btn mt-5 <?php echo ($enrolled) ? 'btn-primary' : 'btn-success'; ?>">Click to <?php echo ($enrolled) ? "Unenroll" : "Enroll" ?></button>
                     </div>
-                <?php } else { ?>
-                    <div class="text-center">
-                        <button id="markAsCompleted" class="btn btn-primary mt-5">Mark as Completed</button>
-                    </div>
-
-            <?php }
-            } ?>
+                </form>
+            <?php } ?>
 
         </div>
     </div>
@@ -176,6 +189,7 @@ while ($row = mysqli_fetch_array($result)) {
 
     <script type="application/javascript">
         var x = 0;
+        var enrolled = 0;
 
         function sortWithIndeces(toSort) {
             for (var i = 0; i < toSort.length; i++) {
@@ -219,20 +233,6 @@ while ($row = mysqli_fetch_array($result)) {
             refrences.innerHTML = sorted_refs.join(" ");
         }
 
-        function markAsCompleted(event) {
-            event.srcElement.classList.remove("btn-primary");
-            event.srcElement.classList.add("btn-success");
-            event.srcElement.innerHTML = "Completed 🎉🎉";
-            <?php
-            $user_id = $_SESSION['auth_arr']['id'];
-            $sqlquery = "INSERT INTO done_course VALUES ('$user_id', '$id')";
-            mysqli_query($connection, $sqlquery);
-            ?>
-        }
-
-        <?php if (!$completed) { ?>
-            document.getElementById("markAsCompleted").addEventListener("click", markAsCompleted);
-        <?php } ?>
         document.getElementById("sortButton").addEventListener("click", sortRefs);
     </script>
 </body>
