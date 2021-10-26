@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2021 at 06:11 PM
+-- Generation Time: Oct 26, 2021 at 02:02 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -65,7 +65,9 @@ CREATE TABLE `enrollment` (
 INSERT INTO `enrollment` (`user_id`, `course_id`) VALUES
 (2, 1),
 (2, 3),
-(2, 6);
+(2, 6),
+(4, 2),
+(4, 6);
 
 -- --------------------------------------------------------
 
@@ -110,7 +112,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `admin_flag`) VALUES
 (1, 'Rahul Kumawat', 'rahul@gmail.com', 'MTIz', 1),
 (2, 'Mohith', 'mohith23102000@gmail.com', 'MTIz', 0),
-(3, 'XYZ', 'xyz@gmail.com', 'MTIz', 0);
+(3, 'XYZ', 'xyz@gmail.com', 'MTIz', 0),
+(4, 'Kumawat', 'kmw@gmail.com', 'MTIz', 0);
 
 -- --------------------------------------------------------
 
@@ -135,11 +138,7 @@ CREATE TABLE `video_ref` (
 
 INSERT INTO `video_ref` (`id`, `name`, `author`, `image_url`, `access_link`, `dur_val`, `dur_tag`, `course_id`) VALUES
 (1, 'What is HTML? A brief introduction of html || HTML basics', 'Sani World', 'https://mohith2310.github.io/Web-Coursera/images/html_course/html1.jpg', 'https://www.youtube.com/watch?v=BvSTiqvm7sM', 3, 'Small', 1),
-(2, 'Creating an HTML file in Notepad', 'Dan Gardner', 'https://mohith2310.github.io/Web-Coursera/images/html_course/html2.jpg', 'https://www.youtube.com/watch?v=BvSTiqvm7sM', 3, 'Small', 1),
-(10, 'vdvdw', 'vdw', 'vwv', 'vww', 32, 'vsvs', 2),
-(11, 'vdvdw', 'vdw', 'vwv', 'vww', 32, 'vsvs', 2),
-(12, 'vdvdw', 'vdw', 'vwv', 'vww', 32, 'vsvs', 2),
-(13, 'vdvdw', 'vdw', 'vwv', 'vww', 32, 'vsvs', 2);
+(2, 'Creating an HTML file in Notepad', 'Dan Gardner', 'https://mohith2310.github.io/Web-Coursera/images/html_course/html2.jpg', 'https://www.youtube.com/watch?v=BvSTiqvm7sM', 3, 'Small', 1);
 
 --
 -- Indexes for dumped tables
@@ -199,7 +198,7 @@ ALTER TABLE `site_ref`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `video_ref`

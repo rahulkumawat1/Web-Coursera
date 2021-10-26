@@ -32,6 +32,26 @@ if (isset($_SESSION['auth_arr'])) {
         $enrolled = true;
 }
 
+$user_names = array();
+if ($auth and $_SESSION['auth_arr']['admin_flag'] == 1) {
+    $sqlquery = "SELECT user_id from enrollment WHERE course_id='$id'";
+    $result = mysqli_query($connection, $sqlquery);
+    while ($row = mysqli_fetch_array($result)) {
+        if ($row != false) {
+            $user_ids = array();
+            for ($i = 0; $i < count($row) / 2; $i++) {
+                array_push($user_ids, $row[$i]);
+            }
+            foreach ($user_ids as $enr_id) {
+                $sqlquery = "SELECT name FROM user WHERE id='$enr_id'";
+                $result1 = mysqli_fetch_array(mysqli_query($connection, $sqlquery));
+                for ($i = 0; $i < count($result1) / 2; $i++) {
+                    array_push($user_names, $result1[$i]);
+                }
+            }
+        }
+    }
+}
 
 $sqlquery = "SELECT * from course WHERE id='$id'";
 $result = mysqli_query($connection, $sqlquery);
@@ -73,12 +93,18 @@ while ($row = mysqli_fetch_array($result)) {
 <head>
     <title>Web Coursera</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/course.css" />
 </head>
 
 <body>
     <?php
+    $main = "course.php";
     include('header.php')
     ?>
 
@@ -165,7 +191,7 @@ while ($row = mysqli_fetch_array($result)) {
                 </table>
             </div>
             <?php
-            if ($auth) { ?>
+            if ($auth and $_SESSION['auth_arr']['admin_flag'] == 0) { ?>
                 <form method="POST">
                     <div class="text-center">
                         <?php
@@ -182,6 +208,36 @@ while ($row = mysqli_fetch_array($result)) {
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: black;">Users</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php if (count($user_names) == 0) {
+                        echo "<p>No student is enrolled</p>";
+                    } else { ?>
+                        <ul>
+                            <?php
+                            foreach ($user_names as $enr_name) {
+                                echo "<li>$enr_name</li>";
+                            }
+                            ?>
+
+                        </ul>
+                    <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Site footer -->
     <?php include('footer.php') ?>
@@ -232,6 +288,15 @@ while ($row = mysqli_fetch_array($result)) {
 
             refrences.innerHTML = sorted_refs.join(" ");
         }
+
+        function showUsers(event) {
+
+        }
+
+        <?php
+        if ($auth and $_SESSION['auth_arr']['admin-flag'] == 1) { ?>
+            document.getElementById("showUsers").addEventListener("click", showUsers);
+        <?php } ?>
 
         document.getElementById("sortButton").addEventListener("click", sortRefs);
     </script>

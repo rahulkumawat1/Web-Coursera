@@ -16,13 +16,18 @@ function split_name($name)
                 <?php if (isset($_SESSION['auth_arr'])) { ?>
 
                     <li class="nav-item">
-                        <a class="nav-link" style="color: #F1522A" href="">
+                        <a class="nav-link" style="color: #F1522A; cursor: default;" href="">
                             <?php
                             $name_arr = split_name($_SESSION['auth_arr']['name']);
                             echo $name_arr[0];
                             ?></a>
                     </li>
-                    <?php if ($_SESSION['auth_arr']['admin_flag'] == 1) { ?>
+                    <?php if ($_SESSION['auth_arr']['admin_flag'] == 1 and isset($main) and $main == "course.php") { ?>
+                        <li class="nav-item">
+                            <button class="nav-link" style="background: none; outline: none; border: none;" data-toggle="modal" data-target="#exampleModalLong">Users</button>
+                        </li>
+                    <?php } ?>
+                    <?php if ($_SESSION['auth_arr']['admin_flag'] == 1 and isset($main) and $main == "index.php") { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="add_course.php">AddCourse</a>
                         </li>
@@ -39,7 +44,7 @@ function split_name($name)
                     </li>
                 <?php } ?>
             </ul>
-            <form class="d-flex" action="<?php echo $main ?>" method="GET">
+            <form class="d-flex" action="index.php" method="GET">
                 <input class="form-control" type="search" name="search" placeholder="Search Courses" aria-label="Search" />
                 <button class="btn btn-primary" type="submit">
                     <i class="fa fa-search" aria-hidden="true"></i>

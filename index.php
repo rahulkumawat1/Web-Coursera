@@ -81,7 +81,7 @@ if (isset($_GET['search'])) {
 
     <div class="container py-3 text-left">
         <h1 style="color: #d3d3d3" class="display-6">
-            <a style="text-decoration: none; color: #d3d3d3" href="login.php" onmouseover="this.style.color='#fdfdfd'" onmouseout="this.style.color='#d3d3d3'">Web Coursera</a>
+            <a style="text-decoration: none; color: #d3d3d3" href="" onmouseover="this.style.color='#fdfdfd'" onmouseout="this.style.color='#d3d3d3'">Web Coursera</a>
             >
             <a style="text-decoration: none; color: #d3d3d3" href="" onmouseover="this.style.color='#fdfdfd'" onmouseout="this.style.color='#d3d3d3'">Courses</a>
         </h1>
