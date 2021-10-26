@@ -2,6 +2,10 @@
 session_start();
 $connection = new mysqli('localhost', 'root', '', 'web_coursera');
 
+if (!(isset($_SESSION['auth_arr']) and $_SESSION['auth_arr']['admin_flag'] == 1)) {
+  header("Location:http://localhost/Web-Coursera/index.php");
+}
+
 if (isset($_POST['add_course'])) {
   $course_name = $_POST['name'];
   $image_url = $_POST['image_url'];

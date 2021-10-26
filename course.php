@@ -12,7 +12,6 @@ $enrolled = false;
 $connection = new mysqli('localhost', 'root', '', 'web_coursera');
 
 
-
 if (isset($_SESSION['auth_arr'])) {
     $auth = true;
     $user_id = $_SESSION['auth_arr']['id'];
@@ -86,6 +85,22 @@ while ($row = mysqli_fetch_array($result)) {
     $x++;
 }
 
+$isAnounce = false;
+if ($auth) {
+    $sqlquery = "SELECT * FROM announcement WHERE course_id='$id'";
+    $result = mysqli_query($connection, $sqlquery);
+    if ($result) {
+        $isAnounce = true;
+        $x = 0;
+        $announcements = array();
+        while ($row = mysqli_fetch_array($result)) {
+            $announcements[$x] = array();
+            $announcements[$x] = $row;
+            $x++;
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -127,6 +142,32 @@ while ($row = mysqli_fetch_array($result)) {
             </div>
         </div>
     </div>
+
+    <?php
+    if ($isAnounce) {
+        foreach ($announcements as $announcement) { ?>
+            <div class="container mt-5">
+                <div class="card shadow bg-dark rounded">
+
+
+                    <h5 class="card-header text-center"><?php echo $announcement['title'] ?></h5>
+
+                    <div class="card-body mt-2">
+                        <p>
+                            <?php echo $announcement['text'] ?>
+                        </p>
+                        <p style="display: inline;">Link:</p> <a href="<?php echo $announcement['link'] ?>">Click Here</a>
+                    </div>
+                    <div class="card-footer text-muted text-end">
+                        <?php echo $announcement['time'] ?>
+                    </div>
+                </div>
+            </div>
+
+    <?php }
+    }
+    ?>
+
 
     <div class="content">
         <div class="container">

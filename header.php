@@ -27,9 +27,12 @@ function split_name($name)
                             <button class="nav-link" style="background: none; outline: none; border: none;" data-toggle="modal" data-target="#exampleModalLong">Users</button>
                         </li>
                     <?php } ?>
-                    <?php if ($_SESSION['auth_arr']['admin_flag'] == 1 and isset($main) and $main == "index.php") { ?>
+                    <?php if ($_SESSION['auth_arr']['admin_flag'] == 1) { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="add_course.php">AddCourse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="add_announcement.php">Anouncement</a>
                         </li>
                     <?php } ?>
                     <li class="nav-item">
