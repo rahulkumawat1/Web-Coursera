@@ -289,14 +289,6 @@ while ($row = mysqli_fetch_array($result)) {
             refrences.innerHTML = sorted_refs.join(" ");
         }
 
-        function showUsers(event) {
-
-        }
-
-        <?php
-        if ($auth and $_SESSION['auth_arr']['admin-flag'] == 1) { ?>
-            document.getElementById("showUsers").addEventListener("click", showUsers);
-        <?php } ?>
 
         document.getElementById("sortButton").addEventListener("click", sortRefs);
     </script>
