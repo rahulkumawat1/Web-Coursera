@@ -42,14 +42,14 @@ while ($row = mysqli_fetch_array($result)) {
             <div class="col-xs-6 col-md-3">
                 <h6>Quick Links</h6>
                 <ul class="footer-links">
-                    <li><a href="terms.html">Terms</a></li>
-                    <li><a href="policy.html">Privacy Policy</a></li>
-                    <li>
+                    <li><a href="terms.php">Terms</a></li>
+                    <li><a href="policy.php">Privacy Policy</a></li>
+                    <!-- <li>
                         <a href="#">Help and Support</a>
-                    </li>
-                    <li>
+                    </li> -->
+                    <!-- <li>
                         <a href="#">Contact us</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -64,7 +64,7 @@ while ($row = mysqli_fetch_array($result)) {
                 </p>
             </div>
 
-            <div class="col-md-4 col-sm-6 col-xs-12">
+            <!-- <div class="col-md-4 col-sm-6 col-xs-12">
                 <ul class="social-icons">
                     <li>
                         <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
@@ -79,7 +79,7 @@ while ($row = mysqli_fetch_array($result)) {
                         <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </div>
 </footer>

@@ -62,7 +62,8 @@ while ($row = mysqli_fetch_array($result)) {
 
 <body>
   <?php
-  include('header.php')
+  $main = "add_course.php";
+  include('header.php');
   ?>
 
   <div class="container mt-4 text-white mb-5">
@@ -70,19 +71,19 @@ while ($row = mysqli_fetch_array($result)) {
     <form class="mb-5">
       <div class="form-group mb-2 ">
         <label for="course_name">Name</label>
-        <input type="text" name="name" class="form-control" id="course_name">
+        <input type="text" required name="name" class="form-control" id="course_name">
       </div>
       <div class="form-group mb-2">
         <label for="course_image_url">Image_URL</label>
-        <input type="text" name="image_url" class="form-control" id="course_image_url">
+        <input type="text" required name="image_url" class="form-control" id="course_image_url">
       </div>
       <div class="form-group mb-2">
         <label for="course_sh_desc">Short-Description</label>
-        <textarea name="sh_desc" class="form-control" id="course_sh_desc" cols="30" rows="5" placeholder="Write short-description here..."></textarea>
+        <textarea name="sh_desc" required class="form-control" id="course_sh_desc" cols="30" rows="5" placeholder="Write short-description here..."></textarea>
       </div>
       <div class="form-group mb-2">
         <label for="course_lg_desc">Long-Description</label>
-        <textarea name="lg_desc" class="form-control" id="course_lg_desc" cols="60" rows="5" placeholder="Write long-description here..."></textarea>
+        <textarea name="lg_desc" required class="form-control" id="course_lg_desc" cols="60" rows="5" placeholder="Write long-description here..."></textarea>
       </div>
       <button class="btn btn-primary" type="submit" name="add_course">Submit</button>
 
@@ -105,71 +106,71 @@ while ($row = mysqli_fetch_array($result)) {
           </label>
         </div>
       </div>
+    </form>
 
 
-      <div id="videoRefForm" style="display: block;">
-        <div class="form-group mb-2 ">
-          <label for="ref_name">Name</label>
-          <input type="text" name="ref_name" class="form-control" id="ref_name">
-        </div>
-        <div class="form-group mb-2 ">
-          <label for="author_name">Author-Name</label>
-          <input type="text" name="author_name" class="form-control" id="author_name">
-        </div>
-        <div class="form-group mb-2">
-          <label for="ref_image_url">Image_URL</label>
-          <input type="text" name="ref_image_url" class="form-control" id="ref_image_url">
-        </div>
-        <div class="form-group mb-2">
-          <label for="vid_access_link">Access-Link</label>
-          <input type="text" name="access_link" class="form-control" id="vid_access_link">
-        </div>
-        <div class="form-group mb-2">
-          <label for="dur_val">Duration-Value</label>
-          <input type="number" name="dur_val" class="form-control" id="dur_val">
-        </div>
-        <div class="form-group mb-2">
-          <label for="dur_tag">Duration-Tag</label>
-          <select class="form-control" id="dur_tag" name="dur_tag">
-            <option value="Small" selected>Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-          </select>
-        </div>
-        <div class="form-group mb-2">
-          <label for="vid_course_id">Course-Id</label>
-          <select class="form-control" id="vid_course_id" name="course_id">
-            <?php
-            foreach ($courses as $i => $course) { ?>
-              <option <?php echo ($i == 0) ? 'selected' : '' ?> value="<?php echo $course['id'] ?>"><?php echo $course['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <button type="submit" name="video_ref" class="btn btn-primary">Submit</button>
+    <form action="" method="post" id="videoRefForm" style="display: block;">
+      <div class="form-group mb-2 ">
+        <label for="ref_name">Name</label>
+        <input required type="text" name="ref_name" class="form-control" id="ref_name">
+      </div>
+      <div class="form-group mb-2 ">
+        <label for="author_name">Author-Name</label>
+        <input type="text" name="author_name" class="form-control" id="author_name">
+      </div>
+      <div class="form-group mb-2">
+        <label for="ref_image_url">Image_URL</label>
+        <input type="text" name="ref_image_url" class="form-control" id="ref_image_url">
+      </div>
+      <div class="form-group mb-2">
+        <label for="vid_access_link">Access-Link</label>
+        <input required type="text" name="access_link" class="form-control" id="vid_access_link">
+      </div>
+      <div class="form-group mb-2">
+        <label for="dur_val">Duration-Value</label>
+        <input required type="number" name="dur_val" class="form-control" id="dur_val">
+      </div>
+      <div class="form-group mb-2">
+        <label for="dur_tag">Duration-Tag</label>
+        <select class="form-control" id="dur_tag" name="dur_tag">
+          <option value="Small" selected>Small</option>
+          <option value="Medium">Medium</option>
+          <option value="Large">Large</option>
+        </select>
+      </div>
+      <div class="form-group mb-2">
+        <label for="vid_course_id">Course-Id</label>
+        <select class="form-control" id="vid_course_id" name="course_id">
+          <?php
+          foreach ($courses as $i => $course) { ?>
+            <option <?php echo ($i == 0) ? 'selected' : '' ?> value="<?php echo $course['id'] ?>"><?php echo $course['name'] ?></option>
+          <?php } ?>
+        </select>
       </div>
 
-      <div id="siteRefForm" style="display: none;">
-        <div class="form-group mb-2 ">
-          <label for="site_ref_name">Name</label>
-          <input type="text" name="ref_name" class="form-control" id="site_ref_name">
-        </div>
-        <div class="form-group mb-2">
-          <label for="site_access_link">Access-Link</label>
-          <input type="text" name="access_link" class="form-control" id="site_access_link">
-        </div>
-        <div class="form-group mb-2">
-          <label for="site_course_id">Course-Id</label>
-          <select class="form-control" id="site_course_id" name="course_id">
-            <?php
-            foreach ($courses as $i => $course) { ?>
-              <option <?php echo ($i == 0) ? 'selected' : '' ?> value="<?php echo $course['id'] ?>"><?php echo $course['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
+      <button type="submit" name="video_ref" class="btn btn-primary">Submit</button>
+    </form>
 
-        <button type="submit" name="site_ref" class="btn btn-primary">Submit</button>
+    <form action="" method="post" id="siteRefForm" style="display: none;">
+      <div class="form-group mb-2 ">
+        <label for="site_ref_name">Name</label>
+        <input required type="text" name="ref_name" class="form-control" id="site_ref_name">
       </div>
+      <div class="form-group mb-2">
+        <label for="site_access_link">Access-Link</label>
+        <input required type="text" name="access_link" class="form-control" id="site_access_link">
+      </div>
+      <div class="form-group mb-2">
+        <label for="site_course_id">Course-Id</label>
+        <select class="form-control" id="site_course_id" name="course_id">
+          <?php
+          foreach ($courses as $i => $course) { ?>
+            <option <?php echo ($i == 0) ? 'selected' : '' ?> value="<?php echo $course['id'] ?>"><?php echo $course['name'] ?></option>
+          <?php } ?>
+        </select>
+      </div>
+
+      <button type="submit" name="site_ref" class="btn btn-primary">Submit</button>
     </form>
   </div>
 

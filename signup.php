@@ -6,8 +6,8 @@ if (isset($_POST['signUp'])) {
     $mail = $_POST['email'];
     $pass = base64_encode($_POST['password']);
 
-    if ($name == "") {
-        $er = "Name cannot be empty";
+    if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+        $er = "Invalid email format";
         goto exit_1;
     }
 
@@ -60,13 +60,13 @@ if (isset($_POST['signUp'])) {
                 <i class="icon ion-ios-personadd-outline"></i>
             </div>
             <div class="form-group">
-                <input class="form-control" type="text" name="name" placeholder="Name" />
+                <input class="form-control" required type="text" name="name" placeholder="Name" />
             </div>
             <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email" />
+                <input class="form-control" required type="email" name="email" placeholder="Email" />
             </div>
             <div class="form-group">
-                <input class="form-control" type="password" name="password" placeholder="Password" />
+                <input class="form-control" required type="password" name="password" placeholder="Password" />
             </div>
             <div class="form-group d-grid gap-2">
                 <button class="btn btn-primary" type="submit" name="signUp">Sign Up</button>
@@ -76,10 +76,10 @@ if (isset($_POST['signUp'])) {
                     ?>
                 </p>
             </div>
-            <div class="form-group login-icons">
+            <!-- <div class="form-group login-icons">
                 <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
                 <a class="google" href="#"><i class="fa fa-google"></i></a>
-            </div>
+            </div> -->
             <a href="login.php" class="other-button">Log In</a>
         </form>
     </div>

@@ -5,8 +5,8 @@ if (isset($_POST['login'])) {
     $mail = $_POST['email'];
     $pass = $_POST['password'];
 
-    if ($mail == "") {
-        $er = "Name cannot be empty";
+    if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+        $er = "Invalid email format";
         goto exit_1;
     }
 
@@ -57,10 +57,10 @@ if (isset($_POST['login'])) {
                 <i class="icon ion-ios-locked-outline"></i>
             </div>
             <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email" />
+                <input class="form-control" required type="email" name="email" placeholder="Email" />
             </div>
             <div class="form-group">
-                <input class="form-control" type="password" name="password" placeholder="Password" />
+                <input class="form-control" required type="password" name="password" placeholder="Password" />
             </div>
             <!-- <div class="form-group">
                 <select class="form-control" style="background-color: ;" name="cars">
@@ -76,11 +76,11 @@ if (isset($_POST['login'])) {
                     ?>
                 </p>
             </div>
-            <a href="#" class="forgot">Forgot your email or password?</a>
+            <!-- <a href="#" class="forgot">Forgot your email or password?</a>
             <div class="form-group login-icons">
                 <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
                 <a class="google" href="#"><i class="fa fa-google"></i></a>
-            </div>
+            </div> -->
             <a href="signup.php" class="other-button">Sign Up</a>
         </form>
     </div>

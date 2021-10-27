@@ -29,10 +29,10 @@ function split_name($name)
                     <?php } ?>
                     <?php if ($_SESSION['auth_arr']['admin_flag'] == 1) { ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="add_course.php">AddCourse</a>
+                            <a class="nav-link" <?php if (isset($main) && $main == "add_course.php") { ?> style="color: rgb(238, 237, 237)" <?php } ?> href="add_course.php">AddCourse</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="add_announcement.php">Anouncement</a>
+                            <a class="nav-link" <?php if (isset($main) && $main == "add_announcement.php") { ?> style="color: rgb(238, 237, 237)" <?php } ?> href="add_announcement.php">Anouncement</a>
                         </li>
                     <?php } ?>
                     <li class="nav-item">
@@ -48,7 +48,7 @@ function split_name($name)
                 <?php } ?>
             </ul>
             <form class="d-flex" action="index.php" method="GET">
-                <input class="form-control" type="search" name="search" placeholder="Search Courses" aria-label="Search" />
+                <input class="form-control" type="search" name="search" placeholder="Search Courses" aria-label="Search" value="<?php echo (isset($_GET['search'])) ? $_GET['search'] : '' ?>" />
                 <button class="btn btn-primary" type="submit">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>

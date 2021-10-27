@@ -31,7 +31,8 @@ if (isset($_SESSION['auth_arr'])) {
         $enrolled = true;
 }
 
-$user_names = array();
+$user_details = array();
+$x = 0;
 if ($auth and $_SESSION['auth_arr']['admin_flag'] == 1) {
     $sqlquery = "SELECT user_id from enrollment WHERE course_id='$id'";
     $result = mysqli_query($connection, $sqlquery);
@@ -42,11 +43,11 @@ if ($auth and $_SESSION['auth_arr']['admin_flag'] == 1) {
                 array_push($user_ids, $row[$i]);
             }
             foreach ($user_ids as $enr_id) {
-                $sqlquery = "SELECT name FROM user WHERE id='$enr_id'";
+                $sqlquery = "SELECT name, email FROM user WHERE id='$enr_id'";
                 $result1 = mysqli_fetch_array(mysqli_query($connection, $sqlquery));
-                for ($i = 0; $i < count($result1) / 2; $i++) {
-                    array_push($user_names, $result1[$i]);
-                }
+                $user_details[$x] = array();
+                $user_details[$x] = $result1;
+                $x++;
             }
         }
     }
@@ -85,6 +86,14 @@ while ($row = mysqli_fetch_array($result)) {
     $x++;
 }
 
+
+if (isset($_POST['dlt_anc'])) {
+    $anc_id = (int)$_POST['anc_id'];
+    $sqlquery = "DELETE FROM `announcement` WHERE `announcement`.`id` = $anc_id";
+    $result = mysqli_query($connection, $sqlquery);
+    unset($_POST['dlt_anc']);
+}
+
 $isAnounce = false;
 if ($auth) {
     $sqlquery = "SELECT * FROM announcement WHERE course_id='$id'";
@@ -100,6 +109,7 @@ if ($auth) {
         }
     }
 }
+
 
 ?>
 
@@ -150,7 +160,18 @@ if ($auth) {
                 <div class="card shadow bg-dark rounded">
 
 
-                    <h5 class="card-header text-center"><?php echo $announcement['title'] ?></h5>
+                    <div class="d-flex card-header">
+                        <div class="flex-grow-1 text-center bg-dark" style="color: white;"><?php echo $announcement['title'] ?></div>
+                        <form action="" method="POST">
+                            <input type="hidden" name="anc_id" value="<?php echo $announcement['id'] ?>">
+                            <?php
+                            if (isset($_SESSION['auth_arr']) and $_SESSION['auth_arr']['admin_flag'] == 1) {
+                                echo "<button class='btn btn-danger' name='dlt_anc'><i class='fa fa-trash-o'></i></button>";
+                            }
+                            ?>
+                        </form>
+                    </div>
+
 
                     <div class="card-body mt-2">
                         <p>
@@ -194,7 +215,7 @@ if ($auth) {
                                     <a href="<?php echo $video_refs[$i]['access_link'] ?>"><img src="<?php echo $video_refs[$i]['image_url'] ?>" alt="" height="100" width="200" /></a>
                                 </td>
                                 <td>
-                                    <a href="<?php echo $video_refs[$i]['access_link'] ?>"><?php echo $video_refs[$i]['name'] ?></a>
+                                    <a target="_blank" href="<?php echo $video_refs[$i]['access_link'] ?>"><?php echo $video_refs[$i]['name'] ?></a>
                                     <small class="d-block"><?php echo $video_refs[$i]['author'] ?></small>
                                 </td>
                                 <td><?php echo $video_refs[$i]['dur_tag'] ?></td>
@@ -224,7 +245,7 @@ if ($auth) {
                             <tr scope="row">
                                 <td><?php echo ($i + 1) ?></td>
                                 <td><?php echo $site_refs[$i]['name'] ?></td>
-                                <td><a href="<?php echo $site_refs[$i]['access_link'] ?>">Reference<?php echo ($i + 1) ?></a></td>
+                                <td><a target="_blank" href="<?php echo $site_refs[$i]['access_link'] ?>">Reference<?php echo ($i + 1) ?></a></td>
                             </tr>
                         <?php } ?>
 
@@ -249,36 +270,40 @@ if ($auth) {
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: black;">Users</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <?php if (count($user_names) == 0) {
-                        echo "<p>No student is enrolled</p>";
-                    } else { ?>
-                        <ul>
-                            <?php
-                            foreach ($user_names as $enr_name) {
-                                echo "<li>$enr_name</li>";
-                            }
-                            ?>
+    <?php if (isset($_SESSION['auth_arr']) and $_SESSION['auth_arr']['admin_flag'] == 1) { ?>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle" style="color: black;">Users</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <?php if (count($user_details) == 0) {
+                            echo "<p>No student is enrolled</p>";
+                        } else { ?>
+                            <ul>
+                                <?php
+                                foreach ($user_details as $enr_dtl) {
+                                    $enr_name = $enr_dtl['name'];
+                                    $enr_mail = $enr_dtl['email'];
+                                    echo "<li>$enr_name - $enr_mail</li>";
+                                }
+                                ?>
 
-                        </ul>
-                    <?php } ?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
 
     <!-- Site footer -->
     <?php include('footer.php') ?>
@@ -288,46 +313,22 @@ if ($auth) {
         var x = 0;
         var enrolled = 0;
 
-        function sortWithIndeces(toSort) {
-            for (var i = 0; i < toSort.length; i++) {
-                toSort[i] = [toSort[i], i];
-            }
-            toSort.sort(function(left, right) {
-                return left[0] < right[0] ? -1 : 1;
-            });
-            toSort.sortIndices = [];
-            for (var j = 0; j < toSort.length; j++) {
-                toSort.sortIndices.push(toSort[j][1]);
-                toSort[j] = toSort[j][0];
-            }
-            return toSort;
-        }
 
         function sortRefs(event) {
             refrences = document.getElementById("references");
             refs = [...refrences.children];
-            data_lens = refs.map((ref) => ref.getAttribute("data-len"));
-            sorted_indices = sortWithIndeces(data_lens).sortIndices;
-            sorted_refs = [];
+            refs = refs.map(ref => ref.outerHTML);
+            refs = refs.reverse();
 
             if (x == 1) {
                 event.srcElement.style.transform = "rotate(180deg)";
                 x = 0;
-                for (var i = 0; i < sorted_indices.length; i++) {
-                    refrences.children[sorted_indices[i]].children[0].innerText = i + 1;
-                    sorted_refs.push(refs[sorted_indices[i]].outerHTML);
-                }
             } else {
                 event.srcElement.style.transform = "rotate(0deg)";
                 x = 1;
-                for (var i = sorted_indices.length - 1; i >= 0; i--) {
-                    refrences.children[sorted_indices[i]].children[0].innerText =
-                        sorted_indices.length - i;
-                    sorted_refs.push(refs[sorted_indices[i]].outerHTML);
-                }
             }
 
-            refrences.innerHTML = sorted_refs.join(" ");
+            refrences.innerHTML = refs.join(" ");
         }
 
 

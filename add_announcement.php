@@ -41,7 +41,8 @@ while ($row = mysqli_fetch_array($result)) {
 
 <body>
     <?php
-    include('header.php')
+    $main = "add_announcement.php";
+    include('header.php');
     ?>
 
     <div class="container mt-4 text-white mb-5">
