@@ -32,9 +32,6 @@ function search($word, $prefix)
     }
 
     $word = substr($word, 0, strlen($prefix));
-    // $pattern = "/" + $prefix + "/";
-    // if (preg_match("/tm/", $word))
-    //     echo "hello";
 
     if ($prefix == $word) {
         return 1;

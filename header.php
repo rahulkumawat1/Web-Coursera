@@ -2,9 +2,14 @@
 function split_name($name)
 {
     $name = trim($name);
-    $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-    $first_name = trim(preg_replace('#' . preg_quote($last_name, '#') . '#', '', $name));
-    return array($first_name, $last_name);
+    if (strpos($name, " ") == False) {
+        return array($name, "");
+    } else {
+        $sp_pos = strpos($name, " ");
+        $fname = substr($name, 0, $sp_pos);
+        $sname = substr($name, $sp_pos);
+        return array($fname, $sname);
+    }
 }
 ?>
 
