@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2021 at 02:13 PM
+-- Generation Time: Nov 12, 2021 at 12:23 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -134,10 +134,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `email`, `password`, `admin_flag`) VALUES
-(1, 'Rahul Kumawat', 'rahul@gmail.com', 'MTIz', 1),
-(2, 'Mohith', 'mohith23102000@gmail.com', 'MTIz', 0),
-(3, 'XYZ', 'xyz@gmail.com', 'MTIz', 0),
-(4, 'Kumawat', 'kmw@gmail.com', 'MTIz', 0);
+(1, 'Rahul Kumawat', 'rahul@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 1),
+(2, 'Mohith', 'mohith23102000@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 0),
+(3, 'XYZ', 'xyz@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 0),
+(4, 'Kumawat', 'kmw@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 0),
+(5, 'abc', 'abc@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 0),
+(6, 'tyu', 'tyu@gmail.com', 'a87698e2a18de81180a9307f7f3e58fd', 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +190,8 @@ ALTER TABLE `course`
 -- Indexes for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  ADD PRIMARY KEY (`user_id`,`course_id`);
+  ADD PRIMARY KEY (`user_id`,`course_id`),
+  ADD KEY `fk_course_id4` (`course_id`);
 
 --
 -- Indexes for table `site_ref`
@@ -237,7 +240,7 @@ ALTER TABLE `site_ref`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `video_ref`
@@ -254,6 +257,14 @@ ALTER TABLE `video_ref`
 --
 ALTER TABLE `announcement`
   ADD CONSTRAINT `fk_course_id2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `enrollment`
+--
+ALTER TABLE `enrollment`
+  ADD CONSTRAINT `fk_course_id4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_course_id5` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_course_id6` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `site_ref`
