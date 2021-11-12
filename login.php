@@ -17,7 +17,7 @@ if (isset($_POST['login'])) {
         $sqlquery = "SELECT * from user where email='$mail'";
         $result = mysqli_query($connection, $sqlquery);
         $arr = mysqli_fetch_array($result);
-        if ($arr && base64_decode($arr['password']) == $pass) {
+        if ($arr && $arr['password'] == md5($pass)) {
             $_SESSION['auth_arr'] = $arr;
             header("Location:http://localhost/Web-Coursera/index.php");
         } else {

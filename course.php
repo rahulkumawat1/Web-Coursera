@@ -154,7 +154,7 @@ if ($auth) {
     </div>
 
     <?php
-    if ($isAnounce) {
+    if ($enrolled or ($auth and $_SESSION['auth_arr']['admin_flag'] == 1)) {
         foreach ($announcements as $announcement) { ?>
             <div class="container mt-5">
                 <div class="card shadow bg-dark rounded">

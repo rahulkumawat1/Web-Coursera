@@ -4,12 +4,31 @@ $er = '';
 if (isset($_POST['signUp'])) {
     $name = $_POST['name'];
     $mail = $_POST['email'];
-    $pass = base64_encode($_POST['password']);
 
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
         $er = "Invalid email format";
         goto exit_1;
     }
+
+    if (strlen($_POST['password']) < 5) {
+        $er = "Password length must be at least 5 characters";
+        goto exit_1;
+    }
+    if (!preg_match("/[a-z]/", $_POST['password'])) {
+        $er = "Password must contain lowercase";
+        goto exit_1;
+    }
+    if (!preg_match("/[A-Z]/", $_POST['password'])) {
+        $er = "Password must contain uppercase";
+        goto exit_1;
+    }
+    if (!preg_match("/[!@#$%^&*(){}?_]/", $_POST['password'])) {
+        $er = "Password must contain at least 1 special character";
+        goto exit_1;
+    }
+    $pass = md5($_POST['password']);
+
+
 
     $connection = new mysqli('localhost', 'root', '', 'web_coursera');
     if (!($connection))
@@ -60,10 +79,10 @@ if (isset($_POST['signUp'])) {
                 <i class="icon ion-ios-personadd-outline"></i>
             </div>
             <div class="form-group">
-                <input class="form-control" required type="text" name="name" placeholder="Name" />
+                <input class="form-control" required type="text" name="name" placeholder="Name" value="<?php echo isset($_POST['name']) ? $_POST['name'] : '' ?>" />
             </div>
             <div class="form-group">
-                <input class="form-control" required type="email" name="email" placeholder="Email" />
+                <input class="form-control" required type="email" name="email" placeholder="Email" value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>" />
             </div>
             <div class="form-group">
                 <input class="form-control" required type="password" name="password" placeholder="Password" />

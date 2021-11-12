@@ -21,7 +21,7 @@ $result = mysqli_query($connection, $sqlquery);
 $x = 0;
 $courses = array();
 
-function prefix($word, $prefix)
+function search($word, $prefix)
 {
     $word = strtolower($word);
     $prefix = strtolower($prefix);
@@ -32,6 +32,9 @@ function prefix($word, $prefix)
     }
 
     $word = substr($word, 0, strlen($prefix));
+    // $pattern = "/" + $prefix + "/";
+    // if (preg_match("/tm/", $word))
+    //     echo "hello";
 
     if ($prefix == $word) {
         return 1;
@@ -52,7 +55,7 @@ if (isset($_GET['search'])) {
     $search_courses = array();
     $x = 0;
     for ($i = 0; $i < count($courses); $i++) {
-        if (prefix($courses[$i]['name'], $_GET['search']) == 1) {
+        if (search($courses[$i]['name'], $_GET['search']) == 1) {
             $search_courses[$x] = array();
             $search_courses[$x] = $courses[$i];
             $x++;
